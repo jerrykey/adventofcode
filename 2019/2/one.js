@@ -11,31 +11,39 @@ class Program {
   }
 }
 
-let newInput = [...input]
-//restore the gravity assist program (your puzzle input) to the "1202 program alarm" state
-newInput[1] = 12
-newInput[2] = 2
+// Will return a new array with replaced values
+const process = sequence => {
+  // iterate over input array with step eq 4
+  for (var i = 0; i < sequence.length; i += 4) {
+    if (typeof sequence[i + 1] == "undefined") break
 
-// iterate over input array with step eq 4
-for (var i = 0; i < newInput.length; i += 4) {
-  if (typeof newInput[i + 1] == "undefined") break
+    const program = new Program(
+      sequence[i],
+      sequence[i + 1],
+      sequence[i + 2],
+      sequence[i + 3]
+    )
 
-  const program = new Program(
-    newInput[i],
-    newInput[i + 1],
-    newInput[i + 2],
-    newInput[i + 3]
-  )
+    // exit from loop if get optcode = 99 earlier
+    if (program.exit) break
 
-  // exit from loop if get optcode = 99 earlier
-  if (program.exit) break
+    if (program.optcode === 1) {
+      sequence[program.pos] = sequence[program.v1] + sequence[program.v2]
+    }
 
-  newInput[program.pos] =
-    program.optcode === 1
-      ? newInput[program.v1] + newInput[program.v2]
-      : newInput[program.v1] * newInput[program.v2]
+    if (program.optcode === 2) {
+      sequence[program.pos] = sequence[program.v1] * sequence[program.v2]
+    }
+  }
+  return sequence
 }
 
-const result = newInput[0]
+let sequence = [...input]
+//restore the gravity assist program (your puzzle input) to the "1202 program alarm" state
+sequence[1] = 12
+sequence[2] = 2
 
-export { result, Program }
+const newSequence = process(sequence)
+const result = newSequence[0]
+
+export { result, process }
