@@ -1,5 +1,5 @@
 import { input } from "./input.js"
-import { Program } from "./one.js"
+import { process } from "./one.js"
 
 // counter int variable
 let nounverb = 0
@@ -18,35 +18,15 @@ let needToBe = 19690720
 let notFound = true
 
 while (notFound && nounverb <= 99 * 99) {
-  let newInput = [...input]
+  let sequence = [...input]
   //restore the gravity assist program (your puzzle input) to the "1202 program alarm" state
-  newInput[1] = noun()
-  newInput[2] = verb()
+  sequence[1] = noun()
+  sequence[2] = verb()
 
-  for (var i = 0; i < newInput.length; i += 4) {
-    if (typeof newInput[i + 1] == "undefined") break
-
-    const program = new Program(
-      newInput[i],
-      newInput[i + 1],
-      newInput[i + 2],
-      newInput[i + 3]
-    )
-
-    // exit from loop if get optcode = 99 earlier
-    if (program.exit) break
-
-    if (program.optcode === 1) {
-      newInput[program.pos] = newInput[program.v1] + newInput[program.v2]
-    }
-
-    if (program.optcode === 2) {
-      newInput[program.pos] = newInput[program.v1] * newInput[program.v2]
-    }
-  }
+  let newSequence = process(sequence)
 
   // check result
-  if (newInput[0] === needToBe) {
+  if (newSequence[0] === needToBe) {
     notFound = false
   } else {
     nounverb += 1
