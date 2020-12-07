@@ -1,6 +1,6 @@
 import { input } from "./input.js"
 
-var counter = 0
+let counter = 0
 input
   .map(x => x.split("\r\n").sort((a, b) => b.length - a.length))
   .forEach(x => {
